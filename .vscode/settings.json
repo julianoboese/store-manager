@@ -2,6 +2,7 @@
   "conventionalCommits.scopes": [
     "deps",
     "db",
-    "prodMod"
+    "prodMod",
+    "prodServ"
   ]
 }

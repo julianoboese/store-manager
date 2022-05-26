@@ -1,10 +1,7 @@
 const { expect } = require("chai");
 const sinon = require('sinon');
 const connection = require("../../../db/connection");
-
-const ProductsModel = {
-  getProducts: () => {}
-}
+const ProductsModel = require('../../../models/ProductsModel')
 
 const productsData = [[
   {

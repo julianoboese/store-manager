@@ -3,6 +3,7 @@
     "deps",
     "db",
     "prodMod",
-    "prodServ"
+    "prodServ",
+    "prodCont"
   ]
 }

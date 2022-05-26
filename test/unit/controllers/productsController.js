@@ -1,10 +1,7 @@
 const { expect } = require("chai");
 const sinon = require('sinon');
 const ProductsService = require('../../../services/ProductsService')
-
-const ProductsController = {
-  getProducts: () => {}
-}
+const ProductsController = require('../../../controllers/ProductsController');
 
 const productsData = [
   {
@@ -43,7 +40,7 @@ describe('The getProducts Controller function', () => {
   it('responds with all products', async () => {
     await ProductsController.getProducts(request, response);
 
-    expect(response.json.calledOnce).to.be.true;
+    expect(response.json.calledTwice).to.be.true;
     expect(response.json.calledWith(sinon.match.array)).to.be.true;
     expect(response.json.calledWith(productsData)).to.be.true;
   })

@@ -6,8 +6,15 @@ async function getProducts(_req, res) {
   res.status(200).json(products);
 }
 
-async function getProduct(_req, _res) {
-  return {};
+async function getProduct(req, res) {
+  const { id } = req.params;
+  
+  try {
+    const product = await ProductsService.getProduct(id);
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(404).json({ message: error.message });    
+  }
 }
 
 module.exports = {

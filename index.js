@@ -1,5 +1,5 @@
-const app = require('./app');
 require('dotenv').config();
+const app = require('./app');
 
 // não altere esse arquivo, essa estrutura é necessária para à avaliação do projeto
 

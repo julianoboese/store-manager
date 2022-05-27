@@ -3,25 +3,26 @@ const sinon = require('sinon');
 const ProductsService = require('../../../services/ProductsService')
 const ProductsController = require('../../../controllers/ProductsController');
 
-const productsData = [
-  {
-    id: 1,
-    name: 'product A',
-    quantity: 10
-  },
-  {
-    id: 2,
-    name: 'product B',
-    quantity: 20
-  }
-];
-
 describe('The getProducts Controller function', () => {
+  const productsData = [
+    {
+      id: 1,
+      name: 'product A',
+      quantity: 10
+    },
+    {
+      id: 2,
+      name: 'product B',
+      quantity: 20
+    }
+  ];
+
   const request = {};
   const response = {};
 
   before(() => {
     sinon.stub(ProductsService, 'getProducts').resolves(productsData);
+
     response.status = sinon.stub().returns(response);
     response.json = sinon.stub().returns();
   })

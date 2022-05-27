@@ -3,20 +3,20 @@ const sinon = require('sinon');
 const ProductsModel = require('../../../models/ProductsModel')
 const ProductsService = require('../../../services/ProductsService')
 
-const productsData = [
-  {
-    id: 1,
-    name: 'product A',
-    quantity: 10
-  },
-  {
-    id: 2,
-    name: 'product B',
-    quantity: 20
-  }
-];
-
 describe('The getProducts Service function', () => {
+  const productsData = [
+    {
+      id: 1,
+      name: 'product A',
+      quantity: 10
+    },
+    {
+      id: 2,
+      name: 'product B',
+      quantity: 20
+    }
+  ];
+
   before(() => {
     sinon.stub(ProductsModel, 'getProducts').resolves(productsData);
   })

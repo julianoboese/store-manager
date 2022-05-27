@@ -6,6 +6,11 @@ async function getProducts(_req, res) {
   res.status(200).json(products);
 }
 
+async function getProduct(_req, _res) {
+  return {};
+}
+
 module.exports = {
   getProducts,
+  getProduct,
 };

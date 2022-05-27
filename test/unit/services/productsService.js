@@ -17,11 +17,11 @@ const productsData = [
 ];
 
 describe('The getProducts Service function', () => {
-  before(async () => {
+  before(() => {
     sinon.stub(ProductsModel, 'getProducts').resolves(productsData);
   })
 
-  after(async () => {
+  after(() => {
     ProductsModel.getProducts.restore();
   });
 

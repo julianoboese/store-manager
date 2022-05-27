@@ -1,5 +1,9 @@
+const SalesModel = require('../models/SalesModel');
+
 async function getSales() {
-  return {};
+  const sales = await SalesModel.getSales();
+
+  return sales;
 }
 
 module.exports = {

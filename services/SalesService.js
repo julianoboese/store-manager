@@ -6,6 +6,11 @@ async function getSales() {
   return sales;
 }
 
+async function getSale(id) {
+  return id;
+}
+
 module.exports = {
   getSales,
+  getSale,
 };

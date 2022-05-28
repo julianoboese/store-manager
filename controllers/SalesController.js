@@ -6,6 +6,11 @@ async function getSales(_req, res) {
   res.status(200).json(sales);
 }
 
+async function getSale(_req, _res) {
+  return {};
+}
+
 module.exports = {
   getSales,
+  getSale,
 };

@@ -20,7 +20,24 @@ async function getSales() {
 }
 
 async function getSale(id) {
-  return id;
+  const [sale] = await connection.execute(
+    `
+    SELECT
+      s.date AS date,
+      sp.product_id AS productId,
+      sp.quantity AS quantity
+    FROM
+      sales s
+      INNER JOIN sales_products sp ON s.id = sp.sale_id
+    WHERE
+      s.id = ?
+    ORDER BY
+      productId;
+    `,
+    [id],
+  );
+
+  return sale;
 }
 
 module.exports = {

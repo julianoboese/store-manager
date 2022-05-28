@@ -36,7 +36,14 @@ async function postProduct({ name, quantity }) {
 }
 
 async function putProduct({ id, name, quantity }) {
-  return { id, name, quantity };
+  const [response] = await connection.execute(
+    'UPDATE products SET name = ?, quantity = ? WHERE id = ?',
+    [name, quantity, id],
+  );
+
+  console.log(response);
+
+  return { affectedRows: response.affectedRows };
 }
 
 module.exports = {

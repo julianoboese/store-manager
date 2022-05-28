@@ -49,8 +49,8 @@ describe('The getSales Controller function', () => {
     await SalesController.getSales(request, response);
 
     expect(response.json).to.have.been.calledTwice;
+    expect(response.json).to.have.been.calledWith(sinon.match.array);
     expect(response.json).to.have.been.calledWith(salesData);
-    expect(response.json.calledWith(sinon.match.array)).to.be.true;
   })
 })
 

@@ -6,8 +6,15 @@ async function getSales(_req, res) {
   res.status(200).json(sales);
 }
 
-async function getSale(_req, _res) {
-  return {};
+async function getSale(req, res) {
+  const { id } = req.params;
+  
+  try {
+    const sale = await SalesService.getSale(id);
+    res.status(200).json(sale);
+  } catch (error) {
+    res.status(error.statusCode).json({ message: error.message });    
+  }
 }
 
 module.exports = {

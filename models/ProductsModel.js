@@ -17,7 +17,17 @@ async function getProduct(id) {
   return product[0];
 }
 
+async function getProductByName(name) {
+  return name;
+}
+
+async function postProduct(name, quantity) {
+  return { name, quantity };
+}
+
 module.exports = {
   getProducts,
   getProduct,
+  getProductByName,
+  postProduct,
 };

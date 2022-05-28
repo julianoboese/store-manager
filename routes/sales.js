@@ -5,4 +5,6 @@ const routes = express.Router();
 
 routes.get('/', SalesController.getSales);
 
+routes.get('/:id', SalesController.getSale);
+
 module.exports = routes;

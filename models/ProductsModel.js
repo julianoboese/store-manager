@@ -18,11 +18,21 @@ async function getProduct(id) {
 }
 
 async function getProductByName(name) {
-  return name;
+  const [product] = await connection.execute(
+    'SELECT * FROM products WHERE name = ?',
+    [name],
+  );
+
+  return product[0];
 }
 
-async function postProduct(name, quantity) {
-  return { name, quantity };
+async function postProduct({ name, quantity }) {
+  const [response] = await connection.execute(
+    'INSERT INTO products (name, quantity) VALUES (?, ?)',
+    [name, quantity],
+  );
+
+  return { id: response.insertId };
 }
 
 module.exports = {

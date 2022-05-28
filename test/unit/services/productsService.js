@@ -1,5 +1,5 @@
 const chai = require("chai");
-var chaiAsPromised = require("chai-as-promised");
+const chaiAsPromised = require("chai-as-promised");
 const sinon = require('sinon');
 const ProductsModel = require('../../../models/ProductsModel')
 const ProductsService = require('../../../services/ProductsService')

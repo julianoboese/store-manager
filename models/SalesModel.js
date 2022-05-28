@@ -4,7 +4,7 @@ async function getSales() {
   const [sales] = await connection.execute(
     `
     SELECT
-      sp.sale_id AS saleId,
+      s.id AS saleId,
       s.date AS date,
       sp.product_id AS productId,
       sp.quantity AS quantity
@@ -16,6 +16,7 @@ async function getSales() {
       productId;
     `,
   );
+
   return sales;
 }
 

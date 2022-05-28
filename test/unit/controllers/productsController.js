@@ -95,7 +95,7 @@ describe('The getProduct Controller function', () => {
     const error = new createError.NotFound('Product not found');
     const errorMessage = { message: error.message };
 
-    const request = { params: { id: 1 }};
+    const request = { params: { id: 4 }};
     const response = {};
 
     before(() => {

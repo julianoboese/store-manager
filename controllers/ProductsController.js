@@ -13,7 +13,7 @@ async function getProduct(req, res) {
     const product = await ProductsService.getProduct(id);
     res.status(200).json(product);
   } catch (error) {
-    res.status(404).json({ message: error.message });    
+    res.status(error.statusCode).json({ message: error.message });    
   }
 }
 

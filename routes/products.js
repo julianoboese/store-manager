@@ -8,7 +8,7 @@ routes.get('/', ProductsController.getProducts);
 
 routes.get('/:id', ProductsController.getProduct);
 
-routes.post('/', productValidation);
+routes.post('/', productValidation, ProductsController.postProduct);
 
 routes.put('/:id', productValidation);
 

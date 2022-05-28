@@ -177,3 +177,66 @@ describe('The postProduct Controller function', () => {
     })
   })
 })
+
+describe('The putProduct Controller function', () => {
+
+  describe('when there is a product with the selected id', () => {
+    const updatedProductData = {
+      id: 1,
+      name: 'product E',
+      quantity: 40
+    }
+
+    const request = { params: { id: 1 }};
+    const response = {};
+  
+    before(() => {
+      sinon.stub(ProductsService, 'putProduct').resolves(updatedProductData);
+
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns();
+    })
+  
+    after(() => {
+      ProductsService.putProduct.restore();
+    });
+  
+    it('responds with the status code 201', async () => {
+      await ProductsController.putProduct(request, response);
+  
+      expect(response.status).to.have.been.calledOnce;
+      expect(response.status).to.have.been.calledWith(200);
+    })
+  
+    it('responds with with the new product', async () => {
+      await ProductsController.putProduct(request, response);
+
+      expect(response.json).to.have.been.calledTwice;
+      expect(response.json).to.have.been.calledWith(sinon.match.object);
+      expect(response.json).to.have.been.calledWith(updatedProductData);
+    })
+  })
+
+  describe('when there is no product with the selected id', () => {
+    const error = new createError.NotFound('Product not found');
+
+    const request = { params: { id: 5 }};
+    const response = {};
+    const next = sinon.spy();
+
+    before(() => {
+      sinon.stub(ProductsService, 'putProduct').rejects(error);
+    })
+  
+    after(() => {
+      ProductsService.putProduct.restore();
+    });
+  
+    it('passes the error to the error middleware', async () => {
+      await ProductsController.putProduct(request, response, next);
+  
+      expect(next).to.have.been.calledOnce;
+      expect(next).to.have.been.calledWith(error);
+    })
+  })
+})

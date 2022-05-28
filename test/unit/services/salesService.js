@@ -1,7 +1,12 @@
-const { expect } = require("chai");
+const chai = require("chai");
+const chaiAsPromised = require("chai-as-promised");
 const sinon = require('sinon');
 const SalesModel = require('../../../models/SalesModel')
 const SalesService = require('../../../services/SalesService')
+
+chai.use(chaiAsPromised);
+const expect = chai.expect;
+const should = chai.should();
 
 describe('The getSales Service function', () => {
   const salesData = [

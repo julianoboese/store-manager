@@ -27,7 +27,14 @@ async function postProduct(req, res, next) {
 }
 
 async function putProduct(req, res, next) {
-  return { req, res, next };
+  const { id } = req.params;
+  
+  try {
+    const updatedProduct = await ProductsService.putProduct({ id, ...req.body });
+    res.status(200).json(updatedProduct);
+  } catch (error) {
+    next(error);
+  }
 }
 
 module.exports = {

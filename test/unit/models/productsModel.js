@@ -190,3 +190,35 @@ describe('The postProduct Model function', () => {
     expect(newIdObject.id).to.equal(newId[0].insertId);
   })
 })
+
+describe('The putProduct Model function', () => {
+  const affectedRowsObject = [{ affectedRows: 1 }] ;
+
+  const updatedProductData = {
+    id: 1,
+    name: 'product E',
+    quantity: 40
+  }
+
+  before(() => {
+    sinon.stub(connection, 'execute').resolves(affectedRowsObject);
+  })
+
+  after(() => {
+    connection.execute.restore();
+  });
+
+  it('returns an object', async () => {
+    const updateAffectedRows = await ProductsModel.putProduct(updatedProductData);
+
+    expect(updateAffectedRows).to.be.an('object');
+    expect(Object.keys(updateAffectedRows)).to.have.lengthOf(1);
+    expect(updateAffectedRows).to.have.property('affectedRows').that.is.a('number');
+  })
+
+  it('returns the product with the selected id', async () => {
+    const updateAffectedRows = await ProductsModel.putProduct(updatedProductData);
+
+    expect(updateAffectedRows).to.deep.equal(affectedRowsObject[0])
+  })
+})

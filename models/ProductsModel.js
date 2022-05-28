@@ -35,9 +35,14 @@ async function postProduct({ name, quantity }) {
   return { id: response.insertId };
 }
 
+async function putProduct({ id, name, quantity }) {
+  return { id, name, quantity };
+}
+
 module.exports = {
   getProducts,
   getProduct,
   getProductByName,
   postProduct,
+  putProduct,
 };

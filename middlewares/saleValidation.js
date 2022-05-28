@@ -4,9 +4,6 @@ function saleValidation(req, res, next) {
   const schema = Joi.object({
     productId: Joi.number().min(1).required(),
     quantity: Joi.number().min(1).required(),
-  }).messages({
-    'any.required': '{{#label}} is required',
-    'number.min': '{{#label}} must be greater than or equal to 1',
   });
 
   req.body.forEach((saleProduct) => {

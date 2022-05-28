@@ -18,7 +18,12 @@ async function getProduct(req, res) {
 }
 
 async function postProduct(req, res) {
-  return { req, res };
+  try {
+    const newProduct = await ProductsService.postProduct(req.body);
+    res.status(201).json(newProduct);
+  } catch (error) {
+    res.status(error.statusCode).json({ message: error.message });    
+  }
 }
 
 module.exports = {

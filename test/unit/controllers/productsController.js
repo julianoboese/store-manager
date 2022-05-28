@@ -93,35 +93,24 @@ describe('The getProduct Controller function', () => {
 
   describe('when there is no product with the selected id', () => {
     const error = new createError.NotFound('Product not found');
-    const errorMessage = { message: error.message };
 
     const request = { params: { id: 4 }};
     const response = {};
+    const next = sinon.spy();
 
     before(() => {
       sinon.stub(ProductsService, 'getProduct').rejects(error);
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
     })
   
     after(() => {
       ProductsService.getProduct.restore();
     });
   
-    it('responds with the status code 404', async () => {
-      await ProductsController.getProduct(request, response);
+    it('passes the error to the error middleware', async () => {
+      await ProductsController.getProduct(request, response, next);
   
-      expect(response.status).to.have.been.calledOnce;
-      expect(response.status).to.have.been.calledWith(404);
-    })
-  
-    it('responds with an error message "Product not found"', async () => {
-      await ProductsController.getProduct(request, response);
-
-      expect(response.json).to.have.been.calledTwice;
-      expect(response.json).to.have.been.calledWith(sinon.match.object);
-      expect(response.json).to.have.been.calledWith(errorMessage);
+      expect(next).to.have.been.calledOnce;
+      expect(next).to.have.been.calledWith(error);
     })
   })
 })
@@ -167,35 +156,24 @@ describe('The postProduct Controller function', () => {
 
   describe('when there is already a product with the same name on database', () => {
     const error = new createError.Conflict('Product already exists');
-    const errorMessage = { message: error.message };
 
     const request = {};
     const response = {};
+    const next = sinon.spy();
 
     before(() => {
       sinon.stub(ProductsService, 'postProduct').rejects(error);
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
     })
   
     after(() => {
       ProductsService.postProduct.restore();
     });
   
-    it('responds with the status code 409', async () => {
-      await ProductsController.postProduct(request, response);
+    it('passes the error to the error middleware', async () => {
+      await ProductsController.postProduct(request, response, next);
   
-      expect(response.status).to.have.been.calledOnce;
-      expect(response.status).to.have.been.calledWith(409);
-    })
-  
-    it('responds with an error message "Product already exists"', async () => {
-      await ProductsController.postProduct(request, response);
-
-      expect(response.json).to.have.been.calledTwice;
-      expect(response.json).to.have.been.calledWith(sinon.match.object);
-      expect(response.json).to.have.been.calledWith(errorMessage);
+      expect(next).to.have.been.calledOnce;
+      expect(next).to.have.been.calledWith(error);
     })
   })
 })

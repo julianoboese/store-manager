@@ -10,8 +10,7 @@ function saleValidation(req, res, next) {
     const { error } = schema.validate(saleProduct);
   
     if (error) {
-      const statusCode = error.details[0].type === 'any.required' ? 400 : 422;
-      res.status(statusCode).json({ message: error.details[0].message });
+      next(error.details[0]);
     }
   });
 

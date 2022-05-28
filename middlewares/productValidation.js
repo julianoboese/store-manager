@@ -9,8 +9,7 @@ function productValidation(req, res, next) {
   const { error } = schema.validate(req.body);
 
   if (error) {
-    const statusCode = error.details[0].type === 'any.required' ? 400 : 422;
-    res.status(statusCode).json({ message: error.details[0].message });
+    next(error.details[0]);
   }
 
   next();

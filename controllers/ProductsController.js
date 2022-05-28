@@ -17,7 +17,12 @@ async function getProduct(req, res) {
   }
 }
 
+async function postProduct(req, res) {
+  return { req, res };
+}
+
 module.exports = {
   getProducts,
   getProduct,
+  postProduct,
 };

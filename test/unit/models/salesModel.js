@@ -3,7 +3,7 @@ const sinon = require('sinon');
 const connection = require("../../../db/connection");
 const SalesModel = require('../../../models/SalesModel')
 
-describe('The getProducts Model function', () => {
+describe('The getSales Model function', () => {
   const salesData = [[
     {
       saleId: 1,

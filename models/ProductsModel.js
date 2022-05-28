@@ -41,8 +41,6 @@ async function putProduct({ id, name, quantity }) {
     [name, quantity, id],
   );
 
-  console.log(response);
-
   return { affectedRows: response.affectedRows };
 }
 

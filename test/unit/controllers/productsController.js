@@ -1,8 +1,12 @@
-const { expect } = require("chai");
+const chai = require("chai");
 const sinon = require('sinon');
+const sinonChai = require("sinon-chai");
 const ProductsService = require('../../../services/ProductsService')
 const ProductsController = require('../../../controllers/ProductsController');
 const createError = require("http-errors");
+
+chai.use(sinonChai);
+const expect = chai.expect;
 
 describe('The getProducts Controller function', () => {
   const productsData = [
@@ -35,16 +39,16 @@ describe('The getProducts Controller function', () => {
   it('responds with the status code 200', async () => {
     await ProductsController.getProducts(request, response);
 
-    expect(response.status.calledOnce).to.be.true;
-    expect(response.status.calledWith(200)).to.be.true;
+    expect(response.status).to.have.been.calledOnce;
+    expect(response.status).to.have.been.calledWith(200);
   })
 
   it('responds with all products', async () => {
     await ProductsController.getProducts(request, response);
 
-    expect(response.json.calledTwice).to.be.true;
-    expect(response.json.calledWith(sinon.match.array)).to.be.true;
-    expect(response.json.calledWith(productsData)).to.be.true;
+    expect(response.json).to.have.been.calledTwice;
+    expect(response.json).to.have.been.calledWith(sinon.match.array);
+    expect(response.json).to.have.been.calledWith(productsData);
   })
 })
 
@@ -74,16 +78,16 @@ describe('The getProduct Controller function', () => {
     it('responds with the status code 200', async () => {
       await ProductsController.getProduct(request, response);
   
-      expect(response.status.calledOnce).to.be.true;
-      expect(response.status.calledWith(200)).to.be.true;
+      expect(response.status).to.have.been.calledOnce;
+      expect(response.status).to.have.been.calledWith(200);
     })
   
     it('responds with with the selected product', async () => {
       await ProductsController.getProduct(request, response);
 
-      expect(response.json.calledTwice).to.be.true;
-      expect(response.json.calledWith(sinon.match.object)).to.be.true;
-      expect(response.json.calledWith(productData)).to.be.true;
+      expect(response.json).to.have.been.calledTwice;
+      expect(response.json).to.have.been.calledWith(sinon.match.object);
+      expect(response.json).to.have.been.calledWith(productData);
     })
   })
 
@@ -108,16 +112,16 @@ describe('The getProduct Controller function', () => {
     it('responds with the status code 404', async () => {
       await ProductsController.getProduct(request, response);
   
-      expect(response.status.calledOnce).to.be.true;
-      expect(response.status.calledWith(404)).to.be.true;
+      expect(response.status).to.have.been.calledOnce;
+      expect(response.status).to.have.been.calledWith(404);
     })
   
     it('responds with an error message "Product not found"', async () => {
       await ProductsController.getProduct(request, response);
 
-      expect(response.json.calledTwice).to.be.true;
-      expect(response.json.calledWith(sinon.match.object)).to.be.true;
-      expect(response.json.calledWith(errorMessage)).to.be.true;
+      expect(response.json).to.have.been.calledTwice;
+      expect(response.json).to.have.been.calledWith(sinon.match.object);
+      expect(response.json).to.have.been.calledWith(errorMessage);
     })
   })
 })

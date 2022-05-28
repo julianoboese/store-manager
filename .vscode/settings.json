@@ -10,6 +10,7 @@
     "sales",
     "salesCont",
     "salesServ",
-    "salesMod"
+    "salesMod",
+    "err"
   ]
 }

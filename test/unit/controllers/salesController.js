@@ -102,35 +102,24 @@ describe('The getSale Controller function', () => {
 
   describe('when there is no sale with the selected id', () => {
     const error = new createError.NotFound('Sale not found');
-    const errorMessage = { message: error.message };
 
     const request = { params: { id: 4 }};
     const response = {};
+    const next = sinon.spy();
 
     before(() => {
       sinon.stub(SalesService, 'getSale').rejects(error);
-
-      response.status = sinon.stub().returns(response);
-      response.json = sinon.stub().returns();
     })
   
     after(() => {
       SalesService.getSale.restore();
     });
   
-    it('responds with the status code 404', async () => {
-      await SalesController.getSale(request, response);
-  
-      expect(response.status).to.have.been.calledOnce;
-      expect(response.status).to.have.been.calledWith(404);
-    })
-  
     it('responds with an error message "Sale not found"', async () => {
-      await SalesController.getSale(request, response);
+      await SalesController.getSale(request, response, next);
 
-      expect(response.json).to.have.been.calledTwice;
-      expect(response.json).to.have.been.calledWith(sinon.match.object);
-      expect(response.json).to.have.been.calledWith(errorMessage);
+      expect(next).to.have.been.calledOnce;
+      expect(next).to.have.been.calledWith(error);
     })
   })
 })

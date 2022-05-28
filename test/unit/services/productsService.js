@@ -97,3 +97,68 @@ describe('The getProduct Service function', () => {
     })
   })
 })
+
+describe('The postProduct Service function', () => {
+
+  describe('when there is no product with the same name on database', () => {
+    const productData = undefined;
+
+    const newId = { id: 4 };
+
+    const newProductData = {
+      name: 'product D',
+      quantity: 30
+    }
+  
+    before(() => {
+      sinon.stub(ProductsModel, 'getProductByName').resolves(productData);
+      sinon.stub(ProductsModel, 'postProduct').resolves(newId);
+    })
+  
+    after(() => {
+      ProductsModel.getProductByName.restore();
+      ProductsModel.postProduct.restore();
+    });
+  
+    it('returns an object', async () => {
+      const newProduct = await ProductsService.postProduct(newProductData);
+  
+      expect(newProduct).to.be.an('object');
+      expect(Object.keys(newProduct)).to.have.lengthOf(3);
+      expect(newProduct).to.have.property('id').that.is.a('number');
+      expect(newProduct).to.have.property('name').that.is.a('string');
+      expect(newProduct).to.have.property('quantity').that.is.a('number');
+    })
+  
+    it('returns the product with the new id', async () => {
+      const newProduct = await ProductsService.postProduct(newProductData);
+
+      expect(newProduct).to.deep.equal({ ...newId, ...newProductData })
+    })
+  })
+
+  describe('when there is already a product with the same name on database', () => {
+    const productData = {
+      id: 1,
+      name: 'product A',
+      quantity: 10
+    }
+
+    const newProductData = {
+      name: 'product A',
+      quantity: 10
+    }
+  
+    before(() => {
+      sinon.stub(ProductsModel, 'getProductByName').resolves(productData);
+    })
+  
+    after(() => {
+      ProductsModel.getProductByName.restore();
+    });
+  
+    it('throws a "Product already exists" error', async () => {
+      await ProductsService.postProduct(newProductData).should.be.rejectedWith('Product already exists');
+    })
+  })
+})

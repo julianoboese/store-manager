@@ -27,10 +27,10 @@ async function postProduct({ name, quantity }) {
 
 async function putProduct({ id, name, quantity }) {
   const product = await ProductsModel.getProduct(id);
-  
+
   if (!product) throw new createError.NotFound('Product not found');
 
-  await ProductsModel.putProduct({ name, quantity });
+  await ProductsModel.putProduct({ id, name, quantity });
 
   return { id, name, quantity };
 }

@@ -162,3 +162,68 @@ describe('The postProduct Service function', () => {
     })
   })
 })
+
+describe('The putProduct Service function', () => {
+
+  describe('when there is a product with the selected id', () => {
+    const productData = {
+      id: 1,
+      name: 'product A',
+      quantity: 10
+    };
+
+    const updatedProductData = {
+      id: 1,
+      name: 'product E',
+      quantity: 40
+    }
+  
+    before(() => {
+      sinon.stub(ProductsModel, 'getProduct').resolves(productData);
+      sinon.stub(ProductsModel, 'putProduct').resolves();
+    })
+  
+    after(() => {
+      ProductsModel.getProduct.restore();
+      ProductsModel.putProduct.restore();
+    });
+  
+    it('returns an object', async () => {
+      const newProduct = await ProductsService.putProduct(updatedProductData);
+  
+      expect(newProduct).to.be.an('object');
+      expect(Object.keys(newProduct)).to.have.lengthOf(3);
+      expect(newProduct).to.have.property('id').that.is.a('number');
+      expect(newProduct).to.have.property('name').that.is.a('string');
+      expect(newProduct).to.have.property('quantity').that.is.a('number');
+    })
+  
+    it('returns the product with the new id', async () => {
+      const updatedProduct = await ProductsService.putProduct(updatedProductData);
+
+      expect(updatedProduct).to.deep.equal(updatedProductData);
+    })
+  })
+
+  describe('when there is no product with the selected id', () => {
+    const productData = undefined;
+
+    const updatedProductData = {
+      id: 1,
+      name: 'product E',
+      quantity: 40
+    }
+  
+    before(() => {
+      sinon.stub(ProductsModel, 'getProduct').resolves(productData);
+    })
+  
+    after(() => {
+      ProductsModel.getProduct.restore();
+    });
+  
+    it('throws a "Product not found" error', async () => {
+      await ProductsService.putProduct(updatedProductData).should.be.rejectedWith('Product not found');
+    })
+  })
+})

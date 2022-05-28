@@ -15,8 +15,14 @@ async function getProduct(id) {
   return product;
 }
 
-async function postProduct(name, quantity) {
-  return { name, quantity };
+async function postProduct({ name, quantity }) {
+  const product = await ProductsModel.getProductByName(name);
+  
+  if (product) throw new createError.Conflict('Product already exists');
+
+  const newId = await ProductsModel.postProduct({ name, quantity });
+
+  return { ...newId, name, quantity };
 }
 
 module.exports = {

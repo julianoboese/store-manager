@@ -56,9 +56,14 @@ async function postSale() {
   return { id: response.insertId };
 }
 
+async function putSale({ id, productId, quantity }) {
+  return { id, productId, quantity };
+}
+
 module.exports = {
   getSales,
   getSale,
   postSaleProduct,
   postSale,
+  putSale,
 };

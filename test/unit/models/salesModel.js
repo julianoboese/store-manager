@@ -151,3 +151,35 @@ describe('The postSale Model function', () => {
     expect(newIdObject.id).to.equal(newId[0].insertId);
   })
 })
+
+describe('The putSale Model function', () => {
+  const affectedRowsObject = [{ affectedRows: 1 }] ;
+
+  const updatedSaleData = {
+    id: 1,
+    productId: 1,
+    quantity: 40
+  }
+
+  before(() => {
+    sinon.stub(connection, 'execute').resolves(affectedRowsObject);
+  })
+
+  after(() => {
+    connection.execute.restore();
+  });
+
+  it('returns an object', async () => {
+    const updateAffectedRows = await SalesModel.putSale(updatedSaleData);
+
+    expect(updateAffectedRows).to.be.an('object');
+    expect(Object.keys(updateAffectedRows)).to.have.lengthOf(1);
+    expect(updateAffectedRows).to.have.property('affectedRows').that.is.a('number');
+  })
+
+  it('affects one row', async () => {
+    const updateAffectedRows = await SalesModel.putSale(updatedSaleData);
+
+    expect(updateAffectedRows).to.deep.equal(affectedRowsObject[0])
+  })
+})

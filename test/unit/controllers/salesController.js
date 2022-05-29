@@ -123,3 +123,48 @@ describe('The getSale Controller function', () => {
     })
   })
 })
+
+describe('The postSale Controller function', () => {
+  const newSaleData = {
+    id: 4,
+    itemsSold: [
+      {
+        productId: 1,
+        quantity: 2
+      },
+      {
+        productId: 2,
+        quantity: 5
+      }
+    ]
+  };
+
+  const request = {};
+  const response = {};
+
+  before(() => {
+    sinon.stub(SalesService, 'postSale').resolves(newSaleData);
+
+    response.status = sinon.stub().returns(response);
+    response.json = sinon.stub().returns();
+  })
+
+  after(() => {
+    SalesService.postSale.restore();
+  });
+
+  it('responds with the status code 201', async () => {
+    await SalesController.postSale(request, response);
+
+    expect(response.status).to.have.been.calledOnce;
+    expect(response.status).to.have.been.calledWith(201);
+  })
+
+  it('responds with all sales', async () => {
+    await SalesController.postSale(request, response);
+
+    expect(response.json).to.have.been.calledTwice;
+    expect(response.json).to.have.been.calledWith(sinon.match.object);
+    expect(response.json).to.have.been.calledWith(newSaleData);
+  })
+})

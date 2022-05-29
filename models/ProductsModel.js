@@ -45,7 +45,12 @@ async function putProduct({ id, name, quantity }) {
 }
 
 async function deleteProduct(id) {
-  return id;
+  const [response] = await connection.execute(
+    'DELETE FROM products WHERE id = ?',
+    [id],
+  );
+
+  return { affectedRows: response.affectedRows };
 }
 
 module.exports = {

@@ -35,13 +35,13 @@ describe('The getSales Service function', () => {
   it('returns an array', async () => {
     const sales = await SalesService.getSales();
 
-    expect(sales).to.be.an('array')
+    expect(sales).to.be.an('array');
   })
 
   it('returns all sales', async () => {
     const sales = await SalesService.getSales();
 
-    expect(sales).to.equal(salesData)
+    expect(sales).to.equal(salesData);
   })
 })
 
@@ -84,7 +84,7 @@ describe('The getSale Service function', () => {
     it('returns the sale with the selected id', async () => {
       const sale = await SalesService.getSale(id);
   
-      expect(sale).to.equal(saleData)
+      expect(sale).to.equal(saleData);
     })
   })
 
@@ -104,5 +104,59 @@ describe('The getSale Service function', () => {
     it('throws a "Sale not found" error', async () => {
       await SalesService.getSale(id).should.be.rejectedWith('Sale not found');
     })
+  })
+})
+
+describe('The postSale Service function', () => {
+  const newIdObject = { id: 4 }
+
+  const saleData = [
+    {
+      productId: 1,
+      quantity: 2
+    },
+    {
+      productId: 2,
+      quantity: 5
+    }
+  ]
+
+  const newSaleData = {
+    id: 4,
+    itemsSold: [
+      {
+        productId: 1,
+        quantity: 2
+      },
+      {
+        productId: 2,
+        quantity: 5
+      }
+    ]
+  };
+
+  before(() => {
+    sinon.stub(SalesModel, 'postSale').resolves(newIdObject);
+    sinon.stub(SalesModel, 'postSaleProduct').resolves();
+  })
+
+  after(() => {
+    SalesModel.postSale.restore();
+    SalesModel.postSaleProduct.restore();
+  });
+
+  it('returns an object', async () => {
+    const newSale = await SalesService.postSale(saleData);
+
+    expect(newSale).to.be.an('object');
+    expect(Object.keys(newSale)).to.have.lengthOf(2);
+    expect(newSale).to.have.property('id').that.is.a('number');
+    expect(newSale).to.have.property('itemsSold').that.is.an('array');
+  })
+
+  it('returns the new sale', async () => {
+    const newSale = await SalesService.postSale(saleData);
+
+    expect(newSale).to.deep.equal(newSaleData)
   })
 })

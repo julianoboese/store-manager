@@ -15,7 +15,12 @@ async function getSale(id) {
   return sale;
 }
 
+async function postSale(sale) {
+  return sale;
+}
+
 module.exports = {
   getSales,
   getSale,
+  postSale,
 };

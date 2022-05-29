@@ -198,7 +198,7 @@ describe('The putProduct Service function', () => {
       expect(newProduct).to.have.property('quantity').that.is.a('number');
     })
   
-    it('returns the product with the new id', async () => {
+    it('returns the product with the updated data', async () => {
       const updatedProduct = await ProductsService.putProduct(updatedProductData);
 
       expect(updatedProduct).to.deep.equal(updatedProductData);

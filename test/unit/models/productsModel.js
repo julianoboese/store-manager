@@ -216,8 +216,36 @@ describe('The putProduct Model function', () => {
     expect(updateAffectedRows).to.have.property('affectedRows').that.is.a('number');
   })
 
-  it('returns the product with the selected id', async () => {
+  it('affects one row', async () => {
     const updateAffectedRows = await ProductsModel.putProduct(updatedProductData);
+
+    expect(updateAffectedRows).to.deep.equal(affectedRowsObject[0])
+  })
+})
+
+describe('The deleteProduct Model function', () => {
+  const affectedRowsObject = [{ affectedRows: 1 }] ;
+
+  const id = 1;
+
+  before(() => {
+    sinon.stub(connection, 'execute').resolves(affectedRowsObject);
+  })
+
+  after(() => {
+    connection.execute.restore();
+  });
+
+  it('returns an object', async () => {
+    const updateAffectedRows = await ProductsModel.deleteProduct(id);
+
+    expect(updateAffectedRows).to.be.an('object');
+    expect(Object.keys(updateAffectedRows)).to.have.lengthOf(1);
+    expect(updateAffectedRows).to.have.property('affectedRows').that.is.a('number');
+  })
+
+  it('affects one row', async () => {
+    const updateAffectedRows = await ProductsModel.deleteProduct(id);
 
     expect(updateAffectedRows).to.deep.equal(affectedRowsObject[0])
   })

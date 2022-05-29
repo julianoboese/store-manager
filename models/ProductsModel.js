@@ -44,10 +44,15 @@ async function putProduct({ id, name, quantity }) {
   return { affectedRows: response.affectedRows };
 }
 
+async function deleteProduct(id) {
+  return id;
+}
+
 module.exports = {
   getProducts,
   getProduct,
   getProductByName,
   postProduct,
   putProduct,
+  deleteProduct,
 };

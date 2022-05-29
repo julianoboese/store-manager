@@ -37,9 +37,14 @@ async function putProduct(req, res, next) {
   }
 }
 
+async function deleteProduct(req, res, next) {
+  return { req, res, next };
+}
+
 module.exports = {
   getProducts,
   getProduct,
   postProduct,
   putProduct,
+  deleteProduct,
 };

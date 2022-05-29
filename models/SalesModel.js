@@ -57,7 +57,12 @@ async function postSale() {
 }
 
 async function putSale({ id, productId, quantity }) {
-  return { id, productId, quantity };
+  const [response] = await connection.execute(
+    'UPDATE sales_products SET quantity = ? WHERE sale_id = ? AND product_id = ?',
+    [quantity, id, productId],
+  );
+
+  return { affectedRows: response.affectedRows };
 }
 
 module.exports = {

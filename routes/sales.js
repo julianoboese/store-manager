@@ -10,6 +10,6 @@ routes.get('/:id', SalesController.getSale);
 
 routes.post('/', saleValidation, SalesController.postSale);
 
-routes.put('/:id', saleValidation);
+routes.put('/:id', saleValidation, SalesController.putSale);
 
 module.exports = routes;

@@ -23,7 +23,14 @@ async function postSale(req, res) {
 }
 
 async function putSale(req, res, next) {
-  return { req, res, next };
+  const { id } = req.params;
+
+  try {
+    const updatedSale = await SalesService.putSale({ id, saleData: req.body });
+    res.status(200).json(updatedSale);
+  } catch (error) {
+    next(error);
+  }
 }
 
 module.exports = {

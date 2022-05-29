@@ -42,11 +42,18 @@ async function getSale(id) {
 }
 
 async function postSaleProduct(id, { productId, quantity }) {
-  return { id, productId, quantity };
+  await connection.execute(
+    'INSERT INTO sales_products (sale_id, product_id, quantity) VALUES (?, ?, ?)',
+    [id, productId, quantity],
+  );
 }
 
 async function postSale() {
-  return {};
+  const [response] = await connection.execute(
+    'INSERT INTO sales (date) VALUES (NOW())',
+  );
+
+  return { id: response.insertId };
 }
 
 module.exports = {

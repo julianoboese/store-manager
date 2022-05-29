@@ -35,9 +35,14 @@ async function putProduct({ id, name, quantity }) {
   return { id, name, quantity };
 }
 
+async function deleteProduct(id) {
+  return id;
+}
+
 module.exports = {
   getProducts,
   getProduct,
   postProduct,
   putProduct,
+  deleteProduct,
 };

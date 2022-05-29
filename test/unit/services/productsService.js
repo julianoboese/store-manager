@@ -227,3 +227,50 @@ describe('The putProduct Service function', () => {
     })
   })
 })
+
+describe('The deleteProduct Service function', () => {
+
+  describe('when there is a product with the selected id', () => {
+    const productData = {
+      id: 1,
+      name: 'product A',
+      quantity: 10
+    };
+
+    const id = 1;
+  
+    before(() => {
+      sinon.stub(ProductsModel, 'getProduct').resolves(productData);
+      sinon.stub(ProductsModel, 'deleteProduct').resolves();
+    })
+  
+    after(() => {
+      ProductsModel.getProduct.restore();
+      ProductsModel.deleteProduct.restore();
+    });
+  
+    it('return undefined', async () => {
+      const response = await ProductsService.deleteProduct(id);
+  
+      expect(response).to.be.undefined;
+    })
+  })
+  
+  describe('when there is no product with the selected id', () => {
+    const productData = undefined;
+
+    const id = 1;
+  
+    before(() => {
+      sinon.stub(ProductsModel, 'getProduct').resolves(productData);
+    })
+  
+    after(() => {
+      ProductsModel.getProduct.restore();
+    });
+  
+    it('throws a "Product not found" error', async () => {
+      await ProductsService.deleteProduct(id).should.be.rejectedWith('Product not found');
+    })
+  })
+})

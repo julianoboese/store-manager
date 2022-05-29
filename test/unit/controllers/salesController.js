@@ -168,3 +168,70 @@ describe('The postSale Controller function', () => {
     expect(response.json).to.have.been.calledWith(newSaleData);
   })
 })
+
+describe('The putSale Controller function', () => {
+
+  describe('when there is a sale with the selected id', () => {
+    const updatedSaleData = {
+      saleId: 1,
+      itemUpdated: [
+        {
+          productId: 1,
+          quantity: 6
+        }
+      ]
+    }
+
+    const request = { params: { id: 1 }};
+    const response = {};
+  
+    before(() => {
+      sinon.stub(SalesService, 'putSale').resolves(updatedSaleData);
+
+      response.status = sinon.stub().returns(response);
+      response.json = sinon.stub().returns();
+    })
+  
+    after(() => {
+      SalesService.putSale.restore();
+    });
+  
+    it('responds with the status code 200', async () => {
+      await SalesController.putSale(request, response);
+  
+      expect(response.status).to.have.been.calledOnce;
+      expect(response.status).to.have.been.calledWith(200);
+    })
+  
+    it('responds with with the updated sale', async () => {
+      await SalesController.putSale(request, response);
+
+      expect(response.json).to.have.been.calledTwice;
+      expect(response.json).to.have.been.calledWith(sinon.match.object);
+      expect(response.json).to.have.been.calledWith(updatedSaleData);
+    })
+  })
+
+  describe('when there is no sale with the selected id', () => {
+    const error = new createError.NotFound('Sale not found');
+
+    const request = { params: { id: 4 }};
+    const response = {};
+    const next = sinon.spy();
+
+    before(() => {
+      sinon.stub(SalesService, 'putSale').rejects(error);
+    })
+  
+    after(() => {
+      SalesService.putSale.restore();
+    });
+  
+    it('responds with an error message "Sale not found"', async () => {
+      await SalesController.putSale(request, response, next);
+
+      expect(next).to.have.been.calledOnce;
+      expect(next).to.have.been.calledWith(error);
+    })
+  })
+})

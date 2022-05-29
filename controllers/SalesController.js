@@ -22,8 +22,13 @@ async function postSale(req, res) {
   res.status(201).json(sale);
 }
 
+async function putSale(req, res, next) {
+  return { req, res, next };
+}
+
 module.exports = {
   getSales,
   getSale,
   postSale,
+  putSale,
 };

@@ -23,8 +23,13 @@ async function postSale(sale) {
   return { id, itemsSold: sale };
 }
 
+async function putSale({ id, saleData }) {
+  return { id, saleData };
+}
+
 module.exports = {
   getSales,
   getSale,
   postSale,
+  putSale,
 };

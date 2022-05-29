@@ -160,3 +160,92 @@ describe('The postSale Service function', () => {
     expect(newSale).to.deep.equal(newSaleData)
   })
 })
+
+describe('The putSale Service function', () => {
+
+  describe('when there is a sale with the selected id', () => {
+    const sale = [
+      {
+        date: '2021-09-09T04:54:29.000Z',
+        productId: 1,
+        quantity: 2
+      },
+      {
+        date: '2021-09-09T04:54:54.000Z',
+        productId: 2,
+        quantity: 2
+      }
+    ]
+
+    const id = 1;
+
+    const saleData = [
+      {
+        productId: 1,
+        quantity: 6
+      }
+    ]
+
+    const updatedSaleData = {
+      saleId: 1,
+      itemUpdated: [
+        {
+          productId: 1,
+          quantity: 6
+        }
+      ]
+    }
+
+    before(() => {
+      sinon.stub(SalesModel, 'getSale').resolves(sale);
+      sinon.stub(SalesModel, 'putSale').resolves();
+    })
+  
+    after(() => {
+      SalesModel.getSale.restore();
+      SalesModel.putSale.restore();
+    });
+  
+    it('returns an object', async () => {
+      const updatedSale = await SalesService.putSale({ id, saleData });
+  
+      expect(updatedSale).to.be.an('object');
+      expect(Object.keys(updatedSale)).to.have.lengthOf(2);
+      expect(updatedSale).to.have.property('saleId').that.is.a('number');
+      expect(updatedSale).to.have.property('itemUpdated').that.is.an('array');
+    })
+  
+    it('returns the updated data from the sale', async () => {
+      const updatedSale = await SalesService.putSale({ id, saleData });
+  
+      expect(updatedSale).to.deep.equal(updatedSaleData);
+    })
+  })
+
+  describe('when there is no sale with the selected id', () => {
+    const sale = [];
+
+    const id = 4;
+
+    const saleData = [
+      {
+        productId: 1,
+        quantity: 6
+      }
+    ]
+  
+    before(() => {
+      sinon.stub(SalesModel, 'getSale').resolves(sale);
+      sinon.stub(SalesModel, 'putSale').resolves();
+    })
+  
+    after(() => {
+      SalesModel.getSale.restore();
+      SalesModel.putSale.restore();
+    });
+  
+    it('throws a "Sale not found" error', async () => {
+      await SalesService.putSale({ id, saleData }).should.be.rejectedWith('Sale not found');
+    })
+  })
+})

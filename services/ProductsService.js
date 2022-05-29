@@ -36,7 +36,11 @@ async function putProduct({ id, name, quantity }) {
 }
 
 async function deleteProduct(id) {
-  return id;
+  const product = await ProductsModel.getProduct(id);
+
+  if (!product) throw new createError.NotFound('Product not found');
+
+  await ProductsModel.deleteProduct(id);
 }
 
 module.exports = {

@@ -16,7 +16,11 @@ async function getSale(id) {
 }
 
 async function postSale(sale) {
-  return sale;
+  const { id } = await SalesModel.postSale();
+
+  await Promise.all(sale.map((saleProduct) => SalesModel.postSaleProduct(id, saleProduct)));
+
+  return { id, itemsSold: sale };
 }
 
 module.exports = {

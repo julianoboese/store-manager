@@ -8,7 +8,7 @@ routes.get('/', SalesController.getSales);
 
 routes.get('/:id', SalesController.getSale);
 
-routes.post('/', saleValidation);
+routes.post('/', saleValidation, SalesController.postSale);
 
 routes.put('/:id', saleValidation);
 

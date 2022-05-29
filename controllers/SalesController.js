@@ -18,7 +18,8 @@ async function getSale(req, res, next) {
 }
 
 async function postSale(req, res) {
-  return { req, res };
+  const sale = await SalesService.postSale(req.body);
+  res.status(201).json(sale);
 }
 
 module.exports = {

@@ -24,7 +24,13 @@ async function postSale(sale) {
 }
 
 async function putSale({ id, saleData }) {
-  return { id, saleData };
+  const sale = await SalesModel.getSale(id);
+
+  if (sale.length === 0) throw new createError.NotFound('Sale not found');
+
+  await Promise.all(saleData.map((saleProduct) => SalesModel.putSale({ id, ...saleProduct })));
+
+  return { saleId: id, itemUpdated: saleData };
 }
 
 module.exports = {

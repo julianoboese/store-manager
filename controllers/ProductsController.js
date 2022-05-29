@@ -38,7 +38,14 @@ async function putProduct(req, res, next) {
 }
 
 async function deleteProduct(req, res, next) {
-  return { req, res, next };
+  const { id } = req.params;
+  
+  try {
+    await ProductsService.deleteProduct(id);
+    res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
 }
 
 module.exports = {

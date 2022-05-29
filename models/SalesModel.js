@@ -41,7 +41,17 @@ async function getSale(id) {
   return sale;
 }
 
+async function postSaleProduct(id, { productId, quantity }) {
+  return { id, productId, quantity };
+}
+
+async function postSale() {
+  return {};
+}
+
 module.exports = {
   getSales,
   getSale,
+  postSaleProduct,
+  postSale,
 };

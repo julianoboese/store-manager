@@ -30,13 +30,13 @@ describe('The getSales Model function', () => {
   it('returns an array', async () => {
     const sales = await SalesModel.getSales();
 
-    expect(sales).to.be.an('array')
+    expect(sales).to.be.an('array');
   })
 
   it('returns all sales', async () => {
     const sales = await SalesModel.getSales();
 
-    expect(sales).to.equal(salesData[0])
+    expect(sales).to.equal(salesData[0]);
   })
 })
 
@@ -79,7 +79,7 @@ describe('The getSale Model function', () => {
     it('returns the sale with the selected id', async () => {
       const sale = await SalesModel.getSale(id);
   
-      expect(sale).to.equal(saleData[0])
+      expect(sale).to.equal(saleData[0]);
     })
   })
 
@@ -101,5 +101,53 @@ describe('The getSale Model function', () => {
   
       expect(sale).to.be.an('array').that.is.empty;
     })
+  })
+})
+
+describe('The postSaleProduct Model function', () => {
+  const id = 4;
+  const newSaleProductData = {
+    productId: 1,
+    quantity: 3
+  };
+
+  before(() => {
+    sinon.stub(connection, 'execute').resolves();
+  })
+
+  after(() => {
+    connection.execute.restore();
+  });
+
+  it('returns undefined', async () => {
+    const newSaleProduct = await SalesModel.postSaleProduct(id, newSaleProductData);
+
+    expect(newSaleProduct).to.be.undefined;
+  })
+})
+
+describe('The postSale Model function', () => {
+  const newId = [{ insertId: 4 }];
+
+  before(() => {
+    sinon.stub(connection, 'execute').resolves(newId);
+  })
+
+  after(() => {
+    connection.execute.restore();
+  });
+
+  it('returns an object', async () => {
+    const newIdObject = await SalesModel.postSale();
+
+    expect(newIdObject).to.be.an('object');
+    expect(Object.keys(newIdObject)).to.have.lengthOf(1);
+    expect(newIdObject).to.have.property('id').that.is.a('number');
+  })
+
+  it('returns the new id', async () => {
+    const newIdObject = await SalesModel.postSale();
+
+    expect(newIdObject.id).to.equal(newId[0].insertId);
   })
 })

@@ -34,7 +34,14 @@ async function putSale(req, res, next) {
 }
 
 async function deleteSale(req, res, next) {
-  return { req, res, next };
+  const { id } = req.params;
+  
+  try {
+    await SalesService.deleteSale(id);
+    res.status(204).end();
+  } catch (error) {
+    next(error);
+  }
 }
 
 module.exports = {

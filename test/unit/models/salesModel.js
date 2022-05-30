@@ -183,3 +183,49 @@ describe('The putSale Model function', () => {
     expect(updateAffectedRows).to.deep.equal(affectedRowsObject[0])
   })
 })
+
+describe('The deleteSaleProduct Model function', () => {
+  const id = 1;
+
+  before(() => {
+    sinon.stub(connection, 'execute').resolves();
+  })
+
+  after(() => {
+    connection.execute.restore();
+  });
+
+  it('returns undefined', async () => {
+    const newSaleProduct = await SalesModel.deleteSaleProduct(id);
+
+    expect(newSaleProduct).to.be.undefined;
+  })
+})
+
+describe('The deleteSale Model function', () => {
+  const affectedRowsObject = [{ affectedRows: 1 }];
+
+  const id = 1;
+
+  before(() => {
+    sinon.stub(connection, 'execute').resolves(affectedRowsObject);
+  })
+
+  after(() => {
+    connection.execute.restore();
+  });
+
+  it('returns an object', async () => {
+    const deleteAffectedRows = await SalesModel.deleteSale(id);
+
+    expect(deleteAffectedRows).to.be.an('object');
+    expect(Object.keys(deleteAffectedRows)).to.have.lengthOf(1);
+    expect(deleteAffectedRows).to.have.property('affectedRows').that.is.a('number');
+  })
+
+  it('affects one row', async () => {
+    const deleteAffectedRows = await SalesModel.deleteSale(id);
+
+    expect(deleteAffectedRows).to.deep.equal(affectedRowsObject[0])
+  })
+})

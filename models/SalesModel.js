@@ -65,10 +65,23 @@ async function putSale({ id, productId, quantity }) {
   return { affectedRows: response.affectedRows };
 }
 
+async function deleteSaleProduct(id) {
+  await connection.execute(
+    'DELETE FROM sales_products WHERE sale_id = ?',
+    [id],
+  );
+}
+
+async function deleteSale(id) {
+  return id;
+}
+
 module.exports = {
   getSales,
   getSale,
   postSaleProduct,
   postSale,
   putSale,
+  deleteSaleProduct,
+  deleteSale,
 };

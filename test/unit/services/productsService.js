@@ -249,7 +249,7 @@ describe('The deleteProduct Service function', () => {
       ProductsModel.deleteProduct.restore();
     });
   
-    it('return undefined', async () => {
+    it('returns undefined', async () => {
       const response = await ProductsService.deleteProduct(id);
   
       expect(response).to.be.undefined;
@@ -259,7 +259,7 @@ describe('The deleteProduct Service function', () => {
   describe('when there is no product with the selected id', () => {
     const productData = undefined;
 
-    const id = 1;
+    const id = 5;
   
     before(() => {
       sinon.stub(ProductsModel, 'getProduct').resolves(productData);

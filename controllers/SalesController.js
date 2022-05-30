@@ -33,9 +33,14 @@ async function putSale(req, res, next) {
   }
 }
 
+async function deleteSale(req, res, next) {
+  return { req, res, next };
+}
+
 module.exports = {
   getSales,
   getSale,
   postSale,
   putSale,
+  deleteSale,
 };

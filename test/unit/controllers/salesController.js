@@ -235,3 +235,58 @@ describe('The putSale Controller function', () => {
     })
   })
 })
+
+describe('The deleteSale Controller function', () => {
+
+  describe('when there is a sale with the selected id', () => {
+    const request = { params: { id: 1 }};
+    const response = {};
+  
+    before(() => {
+      sinon.stub(SalesService, 'deleteSale').resolves();
+
+      response.status = sinon.stub().returns(response);
+      response.end = sinon.stub().returns();
+    })
+  
+    after(() => {
+      SalesService.deleteSale.restore();
+    });
+  
+    it('responds with the status code 204', async () => {
+      await SalesController.deleteSale(request, response);
+  
+      expect(response.status).to.have.been.calledOnce;
+      expect(response.status).to.have.been.calledWith(204);
+    })
+  
+    it('responds without a body', async () => {
+      await SalesController.deleteSale(request, response);
+
+      expect(response.end).to.have.been.calledTwice;
+    })
+  })
+
+  describe('when there is no sale with the selected id', () => {
+    const error = new createError.NotFound('Sale not found');
+
+    const request = { params: { id: 5 }};
+    const response = {};
+    const next = sinon.spy();
+
+    before(() => {
+      sinon.stub(SalesService, 'deleteSale').rejects(error);
+    })
+  
+    after(() => {
+      SalesService.deleteSale.restore();
+    });
+  
+    it('passes the error to the error middleware', async () => {
+      await SalesController.deleteSale(request, response, next);
+  
+      expect(next).to.have.been.calledOnce;
+      expect(next).to.have.been.calledWith(error);
+    })
+  })
+})

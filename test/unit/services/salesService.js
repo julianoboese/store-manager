@@ -249,3 +249,61 @@ describe('The putSale Service function', () => {
     })
   })
 })
+
+describe('The deleteSale Service function', () => {
+
+  describe('when there is a sale with the selected id', () => {
+    const sale = [
+      {
+        date: '2021-09-09T04:54:29.000Z',
+        productId: 1,
+        quantity: 2
+      },
+      {
+        date: '2021-09-09T04:54:54.000Z',
+        productId: 2,
+        quantity: 2
+      }
+    ]
+
+    const affectedRowsObject = { affectedRows: 1 };
+
+    const id = 1;
+  
+    before(() => {
+      sinon.stub(SalesModel, 'getSale').resolves(sale);
+      sinon.stub(SalesModel, 'deleteSaleProduct').resolves(affectedRowsObject);
+      sinon.stub(SalesModel, 'deleteSale').resolves();
+    })
+  
+    after(() => {
+      SalesModel.getSale.restore();
+      SalesModel.deleteSaleProduct.restore();
+      SalesModel.deleteSale.restore();
+    });
+  
+    it('returns undefined', async () => {
+      const response = await SalesService.deleteSale(id);
+  
+      expect(response).to.be.undefined;
+    })
+  })
+  
+  describe('when there is no sale with the selected id', () => {
+    const sale = [];
+
+    const id = 5;
+  
+    before(() => {
+      sinon.stub(SalesModel, 'getSale').resolves(sale);
+    })
+  
+    after(() => {
+      SalesModel.getSale.restore();
+    });
+  
+    it('throws a "Sale not found" error', async () => {
+      await SalesService.deleteSale(id).should.be.rejectedWith('Sale not found');
+    })
+  })
+})

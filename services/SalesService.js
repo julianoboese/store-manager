@@ -33,9 +33,14 @@ async function putSale({ id, saleData }) {
   return { saleId: id, itemUpdated: saleData };
 }
 
+async function deleteSale(id) {
+  return id;
+}
+
 module.exports = {
   getSales,
   getSale,
   postSale,
   putSale,
+  deleteSale,
 };

@@ -34,7 +34,11 @@ async function putSale({ id, saleData }) {
 }
 
 async function deleteSale(id) {
-  return id;
+  const sale = await SalesModel.getSale(id);
+
+  if (sale.length === 0) throw new createError.NotFound('Sale not found');
+
+  await Promise.all([SalesModel.deleteSaleProduct(id), SalesModel.deleteSale(id)]);
 }
 
 module.exports = {

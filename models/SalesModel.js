@@ -73,7 +73,12 @@ async function deleteSaleProduct(id) {
 }
 
 async function deleteSale(id) {
-  return id;
+  const [response] = await connection.execute(
+    'DELETE FROM sales WHERE id = ?',
+    [id],
+  );
+
+  return { affectedRows: response.affectedRows };
 }
 
 module.exports = {

@@ -17,6 +17,18 @@ async function getSale(id) {
 }
 
 async function postSale(sale) {
+  const saleProducts = await Promise.all(sale
+    .map(({ productId }) => ProductsModel.getProduct(productId)));
+
+  const noStock = sale.some(({ productId, quantity }) => {
+    const { quantity: currentStock } = saleProducts
+      .find((saleProduct) => saleProduct.id === productId);
+
+    return quantity >= currentStock;
+  });
+
+  if (noStock) throw new createError.UnprocessableEntity('Such amount is not permitted to sell');
+
   const { id } = await SalesModel.postSale();
 
   const postSaleProductPromises = sale

@@ -1,5 +1,6 @@
 const createError = require('http-errors');
 const SalesModel = require('../models/SalesModel');
+const ProductsModel = require('../models/ProductsModel');
 
 async function getSales() {
   const sales = await SalesModel.getSales();
@@ -18,7 +19,15 @@ async function getSale(id) {
 async function postSale(sale) {
   const { id } = await SalesModel.postSale();
 
-  await Promise.all(sale.map((saleProduct) => SalesModel.postSaleProduct(id, saleProduct)));
+  const postSaleProductPromises = sale
+    .map((saleProduct) => SalesModel.postSaleProduct(id, saleProduct));
+
+  const putProductPromises = sale
+    .map(({ productId, quantity }) => (
+      ProductsModel.putProduct({ id: productId, quantity, sale: 'post' })
+  ));
+
+  await Promise.all([...postSaleProductPromises, ...putProductPromises]);
 
   return { id, itemsSold: sale };
 }
@@ -38,7 +47,13 @@ async function deleteSale(id) {
 
   if (sale.length === 0) throw new createError.NotFound('Sale not found');
 
-  await Promise.all([SalesModel.deleteSaleProduct(id), SalesModel.deleteSale(id)]);
+  const putProductPromises = sale
+    .map(({ productId, quantity }) => (
+      ProductsModel.putProduct({ id: productId, quantity, sale: 'delete' })
+  ));
+
+  await Promise.all([SalesModel.deleteSaleProduct(id), SalesModel.deleteSale(id),
+    ...putProductPromises]);
 }
 
 module.exports = {

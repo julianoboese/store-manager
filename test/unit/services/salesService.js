@@ -109,6 +109,18 @@ describe('The getSale Service function', () => {
 })
 
 describe('The postSale Service function', () => {
+  const firstProductData = {
+      id: 1,
+      name: 'product A',
+      quantity: 10
+    };
+
+    const secondProductData = {
+      id: 2,
+      name: 'product B',
+      quantity: 20
+    };
+
   const newIdObject = { id: 4 }
 
   const saleData = [
@@ -137,12 +149,14 @@ describe('The postSale Service function', () => {
   };
 
   before(() => {
+    sinon.stub(ProductsModel, 'getProduct').onFirstCall().resolves(firstProductData).resolves(secondProductData);
     sinon.stub(SalesModel, 'postSale').resolves(newIdObject);
     sinon.stub(SalesModel, 'postSaleProduct').resolves();
     sinon.stub(ProductsModel, 'putProduct').resolves();
   })
 
   after(() => {
+    ProductsModel.getProduct.restore();
     SalesModel.postSale.restore();
     SalesModel.postSaleProduct.restore();
     ProductsModel.putProduct.restore();
@@ -158,6 +172,8 @@ describe('The postSale Service function', () => {
   })
 
   it('returns the new sale', async () => {
+    ProductsModel.getProduct.resetHistory();
+
     const newSale = await SalesService.postSale(saleData);
 
     expect(newSale).to.deep.equal(newSaleData)

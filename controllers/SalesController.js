@@ -17,9 +17,14 @@ async function getSale(req, res, next) {
   }
 }
 
-async function postSale(req, res) {
-  const sale = await SalesService.postSale(req.body);
-  res.status(201).json(sale);
+async function postSale(req, res, next) {
+  try {
+    const sale = await SalesService.postSale(req.body);
+    res.status(201).json(sale);    
+  } catch (error) {
+    console.log(error);
+    next(error);
+  }
 }
 
 async function putSale(req, res, next) {

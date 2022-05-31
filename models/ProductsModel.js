@@ -35,11 +35,25 @@ async function postProduct({ name, quantity }) {
   return { id: response.insertId };
 }
 
-async function putProduct({ id, name, quantity }) {
-  const [response] = await connection.execute(
-    'UPDATE products SET name = ?, quantity = ? WHERE id = ?',
-    [name, quantity, id],
-  );
+async function putProduct({ id, name, quantity, sale }) {
+  let query = name ? 'UPDATE products SET name = ?, ' : 'UPDATE products SET ';
+
+  switch (sale) {
+    case 'post': 
+      query += 'quantity = quantity - ? ';
+      break;
+    case 'delete':
+      query += 'quantity = quantity + ? ';
+      break;
+    default:
+      query += 'quantity = ? ';
+  }
+
+  query += 'WHERE id = ?';
+
+  const params = name ? [name, quantity, id] : [quantity, id];
+
+  const [response] = await connection.execute(query, params);
 
   return { affectedRows: response.affectedRows };
 }

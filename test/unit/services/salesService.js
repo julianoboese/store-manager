@@ -3,6 +3,7 @@ const chaiAsPromised = require("chai-as-promised");
 const sinon = require('sinon');
 const SalesModel = require('../../../models/SalesModel')
 const SalesService = require('../../../services/SalesService')
+const ProductsModel = require('../../../models/ProductsModel')
 
 chai.use(chaiAsPromised);
 const expect = chai.expect;
@@ -138,11 +139,13 @@ describe('The postSale Service function', () => {
   before(() => {
     sinon.stub(SalesModel, 'postSale').resolves(newIdObject);
     sinon.stub(SalesModel, 'postSaleProduct').resolves();
+    sinon.stub(ProductsModel, 'putProduct').resolves();
   })
 
   after(() => {
     SalesModel.postSale.restore();
     SalesModel.postSaleProduct.restore();
+    ProductsModel.putProduct.restore();
   });
 
   it('returns an object', async () => {
@@ -272,12 +275,14 @@ describe('The deleteSale Service function', () => {
   
     before(() => {
       sinon.stub(SalesModel, 'getSale').resolves(sale);
+      sinon.stub(ProductsModel, 'putProduct').resolves();
       sinon.stub(SalesModel, 'deleteSaleProduct').resolves(affectedRowsObject);
       sinon.stub(SalesModel, 'deleteSale').resolves();
     })
   
     after(() => {
       SalesModel.getSale.restore();
+      ProductsModel.putProduct.restore();
       SalesModel.deleteSaleProduct.restore();
       SalesModel.deleteSale.restore();
     });

@@ -3,7 +3,6 @@ const sinon = require('sinon');
 const sinonChai = require("sinon-chai");
 const SalesService = require('../../../services/SalesService');
 const SalesController = require('../../../controllers/SalesController');
-const createError = require("http-errors");
 
 chai.use(sinonChai);
 const expect = chai.expect;
@@ -99,29 +98,6 @@ describe('The getSale Controller function', () => {
       expect(response.json).to.have.been.calledWith(saleData);
     })
   })
-
-  describe('when there is no sale with the selected id', () => {
-    const error = new createError.NotFound('Sale not found');
-
-    const request = { params: { id: 4 }};
-    const response = {};
-    const next = sinon.spy();
-
-    before(() => {
-      sinon.stub(SalesService, 'getSale').rejects(error);
-    })
-  
-    after(() => {
-      SalesService.getSale.restore();
-    });
-  
-    it('responds with an error message "Sale not found"', async () => {
-      await SalesController.getSale(request, response, next);
-
-      expect(next).to.have.been.calledOnce;
-      expect(next).to.have.been.calledWith(error);
-    })
-  })
 })
 
 describe('The postSale Controller function', () => {
@@ -211,29 +187,6 @@ describe('The putSale Controller function', () => {
       expect(response.json).to.have.been.calledWith(updatedSaleData);
     })
   })
-
-  describe('when there is no sale with the selected id', () => {
-    const error = new createError.NotFound('Sale not found');
-
-    const request = { params: { id: 4 }};
-    const response = {};
-    const next = sinon.spy();
-
-    before(() => {
-      sinon.stub(SalesService, 'putSale').rejects(error);
-    })
-  
-    after(() => {
-      SalesService.putSale.restore();
-    });
-  
-    it('responds with an error message "Sale not found"', async () => {
-      await SalesController.putSale(request, response, next);
-
-      expect(next).to.have.been.calledOnce;
-      expect(next).to.have.been.calledWith(error);
-    })
-  })
 })
 
 describe('The deleteSale Controller function', () => {
@@ -264,29 +217,6 @@ describe('The deleteSale Controller function', () => {
       await SalesController.deleteSale(request, response);
 
       expect(response.end).to.have.been.calledTwice;
-    })
-  })
-
-  describe('when there is no sale with the selected id', () => {
-    const error = new createError.NotFound('Sale not found');
-
-    const request = { params: { id: 5 }};
-    const response = {};
-    const next = sinon.spy();
-
-    before(() => {
-      sinon.stub(SalesService, 'deleteSale').rejects(error);
-    })
-  
-    after(() => {
-      SalesService.deleteSale.restore();
-    });
-  
-    it('passes the error to the error middleware', async () => {
-      await SalesController.deleteSale(request, response, next);
-  
-      expect(next).to.have.been.calledOnce;
-      expect(next).to.have.been.calledWith(error);
     })
   })
 })

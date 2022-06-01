@@ -24,14 +24,14 @@ describe('The getProducts Controller function', () => {
   const request = {};
   const response = {};
 
-  before(() => {
+  beforeEach(() => {
     sinon.stub(ProductsService, 'getProducts').resolves(productsData);
 
     response.status = sinon.stub().returns(response);
     response.json = sinon.stub().returns();
   })
 
-  after(() => {
+  afterEach(() => {
     ProductsService.getProducts.restore();
   });
 
@@ -45,7 +45,7 @@ describe('The getProducts Controller function', () => {
   it('responds with all products', async () => {
     await ProductsController.getProducts(request, response);
 
-    expect(response.json).to.have.been.calledTwice;
+    expect(response.json).to.have.been.calledOnce;
     expect(response.json).to.have.been.calledWith(sinon.match.array);
     expect(response.json).to.have.been.calledWith(productsData);
   })
@@ -63,14 +63,14 @@ describe('The getProduct Controller function', () => {
     const request = { params: { id: 1 }};
     const response = {};
   
-    before(() => {
+    beforeEach(() => {
       sinon.stub(ProductsService, 'getProduct').resolves(productData);
 
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
     })
   
-    after(() => {
+    afterEach(() => {
       ProductsService.getProduct.restore();
     });
   
@@ -84,7 +84,7 @@ describe('The getProduct Controller function', () => {
     it('responds with with the selected product', async () => {
       await ProductsController.getProduct(request, response);
 
-      expect(response.json).to.have.been.calledTwice;
+      expect(response.json).to.have.been.calledOnce;
       expect(response.json).to.have.been.calledWith(sinon.match.object);
       expect(response.json).to.have.been.calledWith(productData);
     })
@@ -103,14 +103,14 @@ describe('The postProduct Controller function', () => {
     const request = {};
     const response = {};
   
-    before(() => {
+    beforeEach(() => {
       sinon.stub(ProductsService, 'postProduct').resolves(newProductData);
 
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
     })
   
-    after(() => {
+    afterEach(() => {
       ProductsService.postProduct.restore();
     });
   
@@ -124,7 +124,7 @@ describe('The postProduct Controller function', () => {
     it('responds with with the new product', async () => {
       await ProductsController.postProduct(request, response);
 
-      expect(response.json).to.have.been.calledTwice;
+      expect(response.json).to.have.been.calledOnce;
       expect(response.json).to.have.been.calledWith(sinon.match.object);
       expect(response.json).to.have.been.calledWith(newProductData);
     })
@@ -143,14 +143,14 @@ describe('The putProduct Controller function', () => {
     const request = { params: { id: 1 }};
     const response = {};
   
-    before(() => {
+    beforeEach(() => {
       sinon.stub(ProductsService, 'putProduct').resolves(updatedProductData);
 
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
     })
   
-    after(() => {
+    afterEach(() => {
       ProductsService.putProduct.restore();
     });
   
@@ -164,7 +164,7 @@ describe('The putProduct Controller function', () => {
     it('responds with with the new product', async () => {
       await ProductsController.putProduct(request, response);
 
-      expect(response.json).to.have.been.calledTwice;
+      expect(response.json).to.have.been.calledOnce;
       expect(response.json).to.have.been.calledWith(sinon.match.object);
       expect(response.json).to.have.been.calledWith(updatedProductData);
     })
@@ -177,14 +177,14 @@ describe('The deleteProduct Controller function', () => {
     const request = { params: { id: 1 }};
     const response = {};
   
-    before(() => {
+    beforeEach(() => {
       sinon.stub(ProductsService, 'deleteProduct').resolves();
 
       response.status = sinon.stub().returns(response);
       response.end = sinon.stub().returns();
     })
   
-    after(() => {
+    afterEach(() => {
       ProductsService.deleteProduct.restore();
     });
   
@@ -198,7 +198,7 @@ describe('The deleteProduct Controller function', () => {
     it('responds without a body', async () => {
       await ProductsController.deleteProduct(request, response);
 
-      expect(response.end).to.have.been.calledTwice;
+      expect(response.end).to.have.been.calledOnce;
     })
   })
 })

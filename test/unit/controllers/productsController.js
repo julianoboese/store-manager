@@ -3,7 +3,6 @@ const sinon = require('sinon');
 const sinonChai = require("sinon-chai");
 const ProductsService = require('../../../services/ProductsService')
 const ProductsController = require('../../../controllers/ProductsController');
-const createError = require("http-errors");
 
 chai.use(sinonChai);
 const expect = chai.expect;
@@ -90,29 +89,6 @@ describe('The getProduct Controller function', () => {
       expect(response.json).to.have.been.calledWith(productData);
     })
   })
-
-  describe('when there is no product with the selected id', () => {
-    const error = new createError.NotFound('Product not found');
-
-    const request = { params: { id: 4 }};
-    const response = {};
-    const next = sinon.spy();
-
-    before(() => {
-      sinon.stub(ProductsService, 'getProduct').rejects(error);
-    })
-  
-    after(() => {
-      ProductsService.getProduct.restore();
-    });
-  
-    it('passes the error to the error middleware', async () => {
-      await ProductsController.getProduct(request, response, next);
-  
-      expect(next).to.have.been.calledOnce;
-      expect(next).to.have.been.calledWith(error);
-    })
-  })
 })
 
 describe('The postProduct Controller function', () => {
@@ -151,29 +127,6 @@ describe('The postProduct Controller function', () => {
       expect(response.json).to.have.been.calledTwice;
       expect(response.json).to.have.been.calledWith(sinon.match.object);
       expect(response.json).to.have.been.calledWith(newProductData);
-    })
-  })
-
-  describe('when there is already a product with the same name on database', () => {
-    const error = new createError.Conflict('Product already exists');
-
-    const request = {};
-    const response = {};
-    const next = sinon.spy();
-
-    before(() => {
-      sinon.stub(ProductsService, 'postProduct').rejects(error);
-    })
-  
-    after(() => {
-      ProductsService.postProduct.restore();
-    });
-  
-    it('passes the error to the error middleware', async () => {
-      await ProductsController.postProduct(request, response, next);
-  
-      expect(next).to.have.been.calledOnce;
-      expect(next).to.have.been.calledWith(error);
     })
   })
 })
@@ -216,29 +169,6 @@ describe('The putProduct Controller function', () => {
       expect(response.json).to.have.been.calledWith(updatedProductData);
     })
   })
-
-  describe('when there is no product with the selected id', () => {
-    const error = new createError.NotFound('Product not found');
-
-    const request = { params: { id: 5 }};
-    const response = {};
-    const next = sinon.spy();
-
-    before(() => {
-      sinon.stub(ProductsService, 'putProduct').rejects(error);
-    })
-  
-    after(() => {
-      ProductsService.putProduct.restore();
-    });
-  
-    it('passes the error to the error middleware', async () => {
-      await ProductsController.putProduct(request, response, next);
-  
-      expect(next).to.have.been.calledOnce;
-      expect(next).to.have.been.calledWith(error);
-    })
-  })
 })
 
 describe('The deleteProduct Controller function', () => {
@@ -269,29 +199,6 @@ describe('The deleteProduct Controller function', () => {
       await ProductsController.deleteProduct(request, response);
 
       expect(response.end).to.have.been.calledTwice;
-    })
-  })
-
-  describe('when there is no product with the selected id', () => {
-    const error = new createError.NotFound('Product not found');
-
-    const request = { params: { id: 5 }};
-    const response = {};
-    const next = sinon.spy();
-
-    before(() => {
-      sinon.stub(ProductsService, 'deleteProduct').rejects(error);
-    })
-  
-    after(() => {
-      ProductsService.deleteProduct.restore();
-    });
-  
-    it('passes the error to the error middleware', async () => {
-      await ProductsController.deleteProduct(request, response, next);
-  
-      expect(next).to.have.been.calledOnce;
-      expect(next).to.have.been.calledWith(error);
     })
   })
 })

@@ -109,34 +109,23 @@ describe('The getSale Service function', () => {
 })
 
 describe('The postSale Service function', () => {
-  const firstProductData = {
-      id: 1,
-      name: 'product A',
-      quantity: 10
-    };
 
-    const secondProductData = {
-      id: 2,
-      name: 'product B',
-      quantity: 20
-    };
-
-  const newIdObject = { id: 4 }
-
-  const saleData = [
-    {
-      productId: 1,
-      quantity: 2
-    },
-    {
-      productId: 2,
-      quantity: 5
-    }
-  ]
-
-  const newSaleData = {
-    id: 4,
-    itemsSold: [
+  describe('when there is enough stock', () => {
+    const firstProductData = {
+        id: 1,
+        name: 'product A',
+        quantity: 10
+      };
+  
+      const secondProductData = {
+        id: 2,
+        name: 'product B',
+        quantity: 20
+      };
+  
+    const newIdObject = { id: 4 }
+  
+    const saleData = [
       {
         productId: 1,
         quantity: 2
@@ -146,35 +135,86 @@ describe('The postSale Service function', () => {
         quantity: 5
       }
     ]
-  };
-
-  beforeEach(() => {
-    sinon.stub(ProductsModel, 'getProduct').onFirstCall().resolves(firstProductData).resolves(secondProductData);
-    sinon.stub(SalesModel, 'postSale').resolves(newIdObject);
-    sinon.stub(SalesModel, 'postSaleProduct').resolves();
-    sinon.stub(ProductsModel, 'putProduct').resolves();
+  
+    const newSaleData = {
+      id: 4,
+      itemsSold: [
+        {
+          productId: 1,
+          quantity: 2
+        },
+        {
+          productId: 2,
+          quantity: 5
+        }
+      ]
+    };
+  
+    beforeEach(() => {
+      sinon.stub(ProductsModel, 'getProduct').onFirstCall().resolves(firstProductData).resolves(secondProductData);
+      sinon.stub(SalesModel, 'postSale').resolves(newIdObject);
+      sinon.stub(SalesModel, 'postSaleProduct').resolves();
+      sinon.stub(ProductsModel, 'putProduct').resolves();
+    })
+  
+    afterEach(() => {
+      ProductsModel.getProduct.restore();
+      SalesModel.postSale.restore();
+      SalesModel.postSaleProduct.restore();
+      ProductsModel.putProduct.restore();
+    });
+  
+    it('returns an object', async () => {
+      const newSale = await SalesService.postSale(saleData);
+  
+      expect(newSale).to.be.an('object');
+      expect(Object.keys(newSale)).to.have.lengthOf(2);
+      expect(newSale).to.have.property('id').that.is.a('number');
+      expect(newSale).to.have.property('itemsSold').that.is.an('array');
+    })
+  
+    it('returns the new sale', async () => {
+      const newSale = await SalesService.postSale(saleData);
+  
+      expect(newSale).to.deep.equal(newSaleData)
+    })
   })
 
-  afterEach(() => {
-    ProductsModel.getProduct.restore();
-    SalesModel.postSale.restore();
-    SalesModel.postSaleProduct.restore();
-    ProductsModel.putProduct.restore();
-  });
-
-  it('returns an object', async () => {
-    const newSale = await SalesService.postSale(saleData);
-
-    expect(newSale).to.be.an('object');
-    expect(Object.keys(newSale)).to.have.lengthOf(2);
-    expect(newSale).to.have.property('id').that.is.a('number');
-    expect(newSale).to.have.property('itemsSold').that.is.an('array');
-  })
-
-  it('returns the new sale', async () => {
-    const newSale = await SalesService.postSale(saleData);
-
-    expect(newSale).to.deep.equal(newSaleData)
+  describe('when there is not enough stock', () => {
+    const firstProductData = {
+        id: 1,
+        name: 'product A',
+        quantity: 10
+      };
+  
+      const secondProductData = {
+        id: 2,
+        name: 'product B',
+        quantity: 4
+      };
+  
+    const saleData = [
+      {
+        productId: 1,
+        quantity: 2
+      },
+      {
+        productId: 2,
+        quantity: 5
+      }
+    ]
+  
+    beforeEach(() => {
+      sinon.stub(ProductsModel, 'getProduct').onFirstCall().resolves(firstProductData).resolves(secondProductData);
+    })
+  
+    afterEach(() => {
+      ProductsModel.getProduct.restore();
+    });
+  
+    it('throws a "Such amount is not permitted to sell" error', async () => {
+      await SalesService.postSale(saleData).should.be.rejectedWith('Such amount is not permitted to sell');
+    })
   })
 })
 

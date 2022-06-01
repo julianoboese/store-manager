@@ -148,14 +148,14 @@ describe('The postSale Service function', () => {
     ]
   };
 
-  before(() => {
+  beforeEach(() => {
     sinon.stub(ProductsModel, 'getProduct').onFirstCall().resolves(firstProductData).resolves(secondProductData);
     sinon.stub(SalesModel, 'postSale').resolves(newIdObject);
     sinon.stub(SalesModel, 'postSaleProduct').resolves();
     sinon.stub(ProductsModel, 'putProduct').resolves();
   })
 
-  after(() => {
+  afterEach(() => {
     ProductsModel.getProduct.restore();
     SalesModel.postSale.restore();
     SalesModel.postSaleProduct.restore();
@@ -172,8 +172,6 @@ describe('The postSale Service function', () => {
   })
 
   it('returns the new sale', async () => {
-    ProductsModel.getProduct.resetHistory();
-
     const newSale = await SalesService.postSale(saleData);
 
     expect(newSale).to.deep.equal(newSaleData)

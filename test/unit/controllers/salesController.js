@@ -26,14 +26,14 @@ describe('The getSales Controller function', () => {
   const request = {};
   const response = {};
 
-  before(() => {
+  beforeEach(() => {
     sinon.stub(SalesService, 'getSales').resolves(salesData);
 
     response.status = sinon.stub().returns(response);
     response.json = sinon.stub().returns();
   })
 
-  after(() => {
+  afterEach(() => {
     SalesService.getSales.restore();
   });
 
@@ -47,7 +47,7 @@ describe('The getSales Controller function', () => {
   it('responds with all sales', async () => {
     await SalesController.getSales(request, response);
 
-    expect(response.json).to.have.been.calledTwice;
+    expect(response.json).to.have.been.calledOnce;
     expect(response.json).to.have.been.calledWith(sinon.match.array);
     expect(response.json).to.have.been.calledWith(salesData);
   })
@@ -72,14 +72,14 @@ describe('The getSale Controller function', () => {
     const request = { params: { id: 1 }};
     const response = {};
   
-    before(() => {
+    beforeEach(() => {
       sinon.stub(SalesService, 'getSale').resolves(saleData);
 
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
     })
   
-    after(() => {
+    afterEach(() => {
       SalesService.getSale.restore();
     });
   
@@ -93,7 +93,7 @@ describe('The getSale Controller function', () => {
     it('responds with with the selected sale', async () => {
       await SalesController.getSale(request, response);
 
-      expect(response.json).to.have.been.calledTwice;
+      expect(response.json).to.have.been.calledOnce;
       expect(response.json).to.have.been.calledWith(sinon.match.array);
       expect(response.json).to.have.been.calledWith(saleData);
     })
@@ -118,14 +118,14 @@ describe('The postSale Controller function', () => {
   const request = {};
   const response = {};
 
-  before(() => {
+  beforeEach(() => {
     sinon.stub(SalesService, 'postSale').resolves(newSaleData);
 
     response.status = sinon.stub().returns(response);
     response.json = sinon.stub().returns();
   })
 
-  after(() => {
+  afterEach(() => {
     SalesService.postSale.restore();
   });
 
@@ -139,7 +139,7 @@ describe('The postSale Controller function', () => {
   it('responds with all sales', async () => {
     await SalesController.postSale(request, response);
 
-    expect(response.json).to.have.been.calledTwice;
+    expect(response.json).to.have.been.calledOnce;
     expect(response.json).to.have.been.calledWith(sinon.match.object);
     expect(response.json).to.have.been.calledWith(newSaleData);
   })
@@ -161,14 +161,14 @@ describe('The putSale Controller function', () => {
     const request = { params: { id: 1 }};
     const response = {};
   
-    before(() => {
+    beforeEach(() => {
       sinon.stub(SalesService, 'putSale').resolves(updatedSaleData);
 
       response.status = sinon.stub().returns(response);
       response.json = sinon.stub().returns();
     })
   
-    after(() => {
+    afterEach(() => {
       SalesService.putSale.restore();
     });
   
@@ -182,7 +182,7 @@ describe('The putSale Controller function', () => {
     it('responds with with the updated sale', async () => {
       await SalesController.putSale(request, response);
 
-      expect(response.json).to.have.been.calledTwice;
+      expect(response.json).to.have.been.calledOnce;
       expect(response.json).to.have.been.calledWith(sinon.match.object);
       expect(response.json).to.have.been.calledWith(updatedSaleData);
     })
@@ -195,14 +195,14 @@ describe('The deleteSale Controller function', () => {
     const request = { params: { id: 1 }};
     const response = {};
   
-    before(() => {
+    beforeEach(() => {
       sinon.stub(SalesService, 'deleteSale').resolves();
 
       response.status = sinon.stub().returns(response);
       response.end = sinon.stub().returns();
     })
   
-    after(() => {
+    afterEach(() => {
       SalesService.deleteSale.restore();
     });
   
@@ -216,7 +216,7 @@ describe('The deleteSale Controller function', () => {
     it('responds without a body', async () => {
       await SalesController.deleteSale(request, response);
 
-      expect(response.end).to.have.been.calledTwice;
+      expect(response.end).to.have.been.calledOnce;
     })
   })
 })

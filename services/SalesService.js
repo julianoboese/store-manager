@@ -24,7 +24,7 @@ async function postSale(sale) {
     const { quantity: currentStock } = saleProducts
       .find((saleProduct) => saleProduct.id === productId);
 
-    return quantity >= currentStock;
+    return quantity > currentStock;
   });
 
   if (noStock) throw new createError.UnprocessableEntity('Such amount is not permitted to sell');

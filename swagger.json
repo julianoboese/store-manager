@@ -1,0 +1,459 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Store Manager API",
+    "description": "API created for Trybe course that manages products and sales.",
+    "version": "1.0.0"
+  },
+  "servers":[
+    {
+      "url": "https://store-manager-julianoboese.herokuapp.com"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "allProducts": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "number"
+            },
+            "name": {
+              "type": "string"
+            },
+            "quantity": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          }
+        }
+      },
+      "newProduct": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "number"
+          }
+        }
+      },
+      "allSales": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "saleId": {
+              "type": "number"
+            },
+            "date": {
+              "type": "string"
+            },
+            "productId": {
+              "type": "number"
+            },
+            "quantity": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "sale": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "date": {
+              "type": "string"
+            },
+            "productId": {
+              "type": "number"
+            },
+            "quantity": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "newSale": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "productId": {
+              "type": "number"
+            },
+            "quantity": {
+              "type": "number"
+            }
+          }
+        }
+      },
+      "addedSale": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "itemsSold": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "productId": {
+                  "type": "number"
+                },
+                "quantity": {
+                  "type": "number"
+                }
+              }
+            } 
+          }
+        }
+      },
+      "updatedSale": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "itemsUpdated": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "productId": {
+                  "type": "number"
+                },
+                "quantity": {
+                  "type": "number"
+                }
+              }
+            } 
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "products",
+      "description": "Operations related to products"
+    },
+    {
+      "name": "sales",
+      "description": "Operations related to sales"
+    }
+  ],
+  "paths": {
+    "/products": {
+      "get": {
+        "summary": "Find all products",
+        "description": "Returns all catalogued products",
+        "tags": ["products"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/allProducts"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add new product",
+        "description": "Create a new product with the input data",
+        "tags": ["products"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/newProduct"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/product"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "409": {
+            "description": "Conflict"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/products/{id}": {
+      "get": {
+        "summary": "Find product by ID",
+        "description": "Returns product based on ID",
+        "tags": ["products"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "product ID",
+            "required": true
+          }
+        ], 
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/product"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update product",
+        "description": "Update product with the selected ID",
+        "tags": ["products"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "product ID",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/newProduct"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/product"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete product",
+        "description": "Delete product with the selected ID",
+        "tags": ["products"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "product ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/sales": {
+      "get": {
+        "summary": "Find all sales",
+        "description": "Returns all sales",
+        "tags": ["sales"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/allSales"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Add new sale",
+        "description": "Create a new sale with the input data",
+        "tags": ["sales"],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/newSale"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/addedSale"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      }
+    },
+    "/sales/{id}": {
+      "get": {
+        "summary": "Find sale by ID",
+        "description": "Returns sale based on ID",
+        "tags": ["sales"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "sale ID",
+            "required": true
+          }
+        ], 
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/sale"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "put": {
+        "summary": "Update sale",
+        "description": "Update sale with the selected ID",
+        "tags": ["sales"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "sale ID",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/newSale"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/updatedSale"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "422": {
+            "description": "Unprocessable Entity"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete sale",
+        "description": "Delete sale with the selected ID",
+        "tags": ["sales"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "sale ID",
+            "required": true
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  }
+}
